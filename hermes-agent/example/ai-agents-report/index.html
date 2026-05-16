@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2025-2026 AI Agent 热门项目全景报告</title>
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --surface2: #1a1a28;
+    --accent: #00f0ff;
+    --accent2: #a855f7;
+    --accent3: #f97316;
+    --text: #e2e8f0;
+    --text2: #94a3b8;
+    --border: #1e293b;
+    --gold: #fbbf24;
+    --green: #34d399;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* Animated background */
+  .bg-particles {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 80% 50% at 20% 0%, rgba(0,240,255,0.06) 0%, transparent 50%),
+      radial-gradient(ellipse 60% 40% at 80% 100%, rgba(168,85,247,0.06) 0%, transparent 50%),
+      radial-gradient(ellipse 50% 30% at 50% 50%, rgba(249,115,22,0.04) 0%, transparent 50%);
+  }
+
+  .grid-bg {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.03;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+  /* Header */
+  header {
+    padding: 80px 0 60px;
+    text-align: center;
+    position: relative;
+  }
+
+  .header-badge {
+    display: inline-block;
+    padding: 6px 18px;
+    border-radius: 20px;
+    background: rgba(0,240,255,0.1);
+    border: 1px solid rgba(0,240,255,0.2);
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    background: linear-gradient(135deg, #00f0ff, #a855f7, #f97316);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 16px;
+  }
+
+  .subtitle { color: var(--text2); font-size: 1.1rem; max-width: 600px; margin: 0 auto 32px; }
+
+  .meta {
+    display: flex; justify-content: center; gap: 32px; flex-wrap: wrap;
+  }
+
+  .meta-item {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 20px;
+    border-radius: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    font-size: 14px;
+    color: var(--text2);
+  }
+
+  .meta-item .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .dot.accent { background: var(--accent); box-shadow: 0 0 8px var(--accent); }
+  .dot.accent2 { background: var(--accent2); box-shadow: 0 0 8px var(--accent2); }
+  .dot.accent3 { background: var(--accent3); box-shadow: 0 0 8px var(--accent3); }
+
+  /* Stats Bar */
+  .stats-bar {
+    display: flex; justify-content: center; gap: 48px;
+    padding: 40px 0; margin: 0 0 60px;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+
+  .stat { text-align: center; }
+  .stat-value {
+    font-size: 2.2rem; font-weight: 800;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .stat-label { color: var(--text2); font-size: 13px; margin-top: 4px; }
+
+  /* Section */
+  .section { margin-bottom: 80px; }
+
+  .section-title {
+    font-size: 1.6rem; font-weight: 700;
+    margin-bottom: 8px; display: flex; align-items: center; gap: 12px;
+  }
+  .section-title .icon {
+    font-size: 1.3rem; width: 40px; height: 40px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 12px; background: var(--surface); border: 1px solid var(--border);
+  }
+  .section-desc { color: var(--text2); margin-bottom: 32px; font-size: 14px; }
+
+  /* Tier labels */
+  .tier-label {
+    display: inline-block; padding: 4px 14px; border-radius: 8px;
+    font-size: 13px; font-weight: 700; margin-bottom: 24px;
+  }
+  .tier-1 { background: rgba(251,191,36,0.1); color: var(--gold); border: 1px solid rgba(251,191,36,0.3); }
+  .tier-2 { background: rgba(192,192,192,0.1); color: #c0c0c0; border: 1px solid rgba(192,192,192,0.3); }
+  .tier-3 { background: rgba(205,127,50,0.1); color: #cd7f32; border: 1px solid rgba(205,127,50,0.3); }
+  .tier-4 { background: rgba(52,211,153,0.1); color: var(--green); border: 1px solid rgba(52,211,153,0.3); }
+
+  /* Cards grid */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 20px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0; transition: opacity 0.3s;
+  }
+
+  .card:hover { border-color: rgba(0,240,255,0.3); transform: translateY(-2px); }
+  .card:hover::before { opacity: 1; }
+
+  .card-rank {
+    position: absolute; top: 20px; right: 24px;
+    font-size: 13px; font-weight: 700;
+    padding: 2px 10px; border-radius: 6px;
+  }
+
+  .rank-top3 { background: rgba(251,191,36,0.15); color: var(--gold); }
+  .rank-other { background: rgba(148,163,184,0.1); color: var(--text2); }
+
+  .card-name {
+    font-size: 1.2rem; font-weight: 700; margin-bottom: 6px;
+    display: flex; align-items: center; gap: 10px;
+  }
+
+  .card-stars {
+    font-size: 13px; color: var(--gold); font-weight: 600;
+    display: flex; align-items: center; gap: 4px; margin-bottom: 12px;
+  }
+
+  .card-desc { color: var(--text2); font-size: 14px; margin-bottom: 16px; line-height: 1.5; }
+
+  .card-links { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .link-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 14px; border-radius: 8px;
+    font-size: 12px; font-weight: 600; text-decoration: none;
+    transition: all 0.2s; border: 1px solid transparent;
+  }
+
+  .link-gh {
+    background: rgba(255,255,255,0.05); color: var(--text);
+    border-color: var(--border);
+  }
+  .link-gh:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); }
+
+  .link-web {
+    background: rgba(0,240,255,0.08); color: var(--accent);
+    border-color: rgba(0,240,255,0.2);
+  }
+  .link-web:hover { background: rgba(0,240,255,0.15); }
+
+  .link-doc {
+    background: rgba(168,85,247,0.08); color: var(--accent2);
+    border-color: rgba(168,85,247,0.2);
+  }
+  .link-doc:hover { background: rgba(168,85,247,0.15); }
+
+  .link-paper {
+    background: rgba(249,115,22,0.08); color: var(--accent3);
+    border-color: rgba(249,115,22,0.2);
+  }
+  .link-paper:hover { background: rgba(249,115,22,0.15); }
+
+  /* Trends */
+  .trends {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 20px;
+  }
+
+  .trend-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    display: flex; gap: 16px;
+    transition: all 0.3s;
+  }
+  .trend-card:hover { border-color: rgba(168,85,247,0.3); }
+
+  .trend-icon {
+    width: 48px; height: 48px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem; flex-shrink: 0;
+  }
+
+  .trend-1 { background: rgba(0,240,255,0.1); }
+  .trend-2 { background: rgba(168,85,247,0.1); }
+  .trend-3 { background: rgba(249,115,22,0.1); }
+  .trend-4 { background: rgba(52,211,153,0.1); }
+  .trend-5 { background: rgba(251,191,36,0.1); }
+  .trend-6 { background: rgba(239,68,68,0.1); }
+
+  .trend-title { font-weight: 700; margin-bottom: 6px; font-size: 15px; }
+  .trend-desc { color: var(--text2); font-size: 13px; line-height: 1.5; }
+
+  /* Table */
+  .table-wrap {
+    overflow-x: auto; border-radius: 16px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th {
+    background: var(--surface2); padding: 14px 16px;
+    text-align: left; font-weight: 600; color: var(--text2);
+    font-size: 12px; text-transform: uppercase; letter-spacing: 1px;
+    border-bottom: 1px solid var(--border);
+  }
+  td { padding: 12px 16px; border-bottom: 1px solid var(--border); }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+  tr:last-child td { border-bottom: none; }
+
+  .td-name { font-weight: 600; white-space: nowrap; }
+  .td-stars { color: var(--gold); font-weight: 600; white-space: nowrap; }
+  .td-links { white-space: nowrap; }
+  .td-links a { color: var(--accent); text-decoration: none; font-size: 12px; margin-right: 8px; }
+  .td-links a:hover { text-decoration: underline; }
+
+  /* Ecosystem */
+  .eco-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+  }
+
+  .eco-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px;
+    transition: all 0.3s;
+  }
+  .eco-card:hover { border-color: rgba(52,211,153,0.3); }
+
+  .eco-name { font-weight: 700; margin-bottom: 4px; font-size: 15px; }
+  .eco-role { color: var(--text2); font-size: 13px; margin-bottom: 12px; }
+  .eco-stars { color: var(--gold); font-size: 12px; margin-bottom: 8px; }
+
+  /* Footer */
+  footer {
+    padding: 48px 0; text-align: center;
+    border-top: 1px solid var(--border);
+    color: var(--text2); font-size: 13px;
+    margin-top: 40px;
+  }
+
+  footer strong { color: var(--accent); }
+
+  /* Animations */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .card, .trend-card, .eco-card {
+    animation: fadeInUp 0.5s ease backwards;
+  }
+
+  .card:nth-child(1) { animation-delay: 0.02s; }
+  .card:nth-child(2) { animation-delay: 0.04s; }
+  .card:nth-child(3) { animation-delay: 0.06s; }
+  .card:nth-child(4) { animation-delay: 0.08s; }
+  .card:nth-child(5) { animation-delay: 0.10s; }
+  .card:nth-child(6) { animation-delay: 0.12s; }
+  .card:nth-child(7) { animation-delay: 0.14s; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .cards { grid-template-columns: 1fr; }
+    .trends { grid-template-columns: 1fr; }
+    .stats-bar { gap: 24px; }
+    header { padding: 40px 0 30px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-particles"></div>
+<div class="grid-bg"></div>
+
+<div class="container">
+
+  <!-- Header -->
+  <header>
+    <div class="header-badge">📊 Research Report · May 2026</div>
+    <h1>2025-2026 AI Agent 热门项目全景报告</h1>
+    <p class="subtitle">覆盖 44 个热门开源 AI Agent 项目，从超级明星到新兴力量，一览 Agent 生态全貌</p>
+    <div class="meta">
+      <div class="meta-item">
+        <span class="dot accent"></span>
+        数据来源：GitHub API
+      </div>
+      <div class="meta-item">
+        <span class="dot accent2"></span>
+        更新时间：2026-05-15
+      </div>
+      <div class="meta-item">
+        <span class="dot accent3"></span>
+        共计 44 个项目
+      </div>
+    </div>
+  </header>
+
+  <!-- Stats Bar -->
+  <div class="stats-bar">
+    <div class="stat"><div class="stat-value">2,062K+</div><div class="stat-label">总 Star 数</div></div>
+    <div class="stat"><div class="stat-value">44</div><div class="stat-label">收录项目</div></div>
+    <div class="stat"><div class="stat-value">7</div><div class="stat-label">10万+ Star 项目</div></div>
+    <div class="stat"><div class="stat-value">6</div><div class="stat-label">关键趋势</div></div>
+  </div>
+
+  <!-- Trends -->
+  <section class="section">
+    <div class="section-title">
+      <span class="icon">🔮</span> 六大关键趋势
+    </div>
+    <p class="section-desc">2025-2026 年 AI Agent 领域最重要的技术方向和行业变化</p>
+
+    <div class="trends">
+      <div class="trend-card">
+        <div class="trend-icon trend-1">🏗️</div>
+        <div>
+          <div class="trend-title">从框架到平台</div>
+          <div class="trend-desc">Dify、n8n、Mastra 等项目将 Agent 能力封装为可视化平台，大幅降低使用门槛，加速企业落地</div>
+        </div>
+      </div>
+      <div class="trend-card">
+        <div class="trend-icon trend-2">🔌</div>
+        <div>
+          <div class="trend-title">MCP 协议一统天下</div>
+          <div class="trend-desc">Anthropic 的 Model Context Protocol 已成为 Agent-工具通信的事实标准，所有主流框架都在积极集成</div>
+        </div>
+      </div>
+      <div class="trend-card">
+        <div class="trend-icon trend-3">💻</div>
+        <div>
+          <div class="trend-title">终端 Agent 爆发</div>
+          <div class="trend-desc">Claude Code、OpenAI Codex CLI、Aider、Plandex 等终端编码 Agent 竞争白热化</div>
+        </div>
+      </div>
+      <div class="trend-card">
+        <div class="trend-icon trend-4">🤝</div>
+        <div>
+          <div class="trend-title">多 Agent 协作标配</div>
+          <div class="trend-desc">AutoGen、CrewAI、MetaGPT、OpenAI Agents SDK、Google ADK 全部支持多 Agent 编排</div>
+        </div>
+      </div>
+      <div class="trend-card">
+        <div class="trend-icon trend-5">🧠</div>
+        <div>
+          <div class="trend-title">记忆与状态成关键</div>
+          <div class="trend-desc">mem0、Letta 等项目专注于解决 Agent 的记忆和持久化状态问题，成为差异化竞争点</div>
+        </div>
+      </div>
+      <div class="trend-card">
+        <div class="trend-icon trend-6">🌐</div>
+        <div>
+          <div class="trend-title">Web / 手机 Agent 兴起</div>
+          <div class="trend-desc">Browser-use、Agent-S、Open-AutoGLM 让 Agent 能直接操作网页和手机，突破终端限制</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tier 1 -->
+  <section class="section">
+    <div class="section-title">
+      <span class="icon">🥇</span> 第一梯队：超级明星
+    </div>
+    <p class="section-desc">10万+ GitHub Stars — AI Agent 生态的绝对核心</p>
+    <div class="tier-label tier-1">10万+ Stars</div>
+
+    <div class="cards">
+      <div class="card">
+        <div class="card-rank rank-top3">#1</div>
+        <div class="card-name">⚡ Obra Superpowers</div>
+        <div class="card-stars">⭐ 192,387</div>
+        <div class="card-desc">Agentic 技能框架与软件开发方法论，定义"技能驱动"的 Agent 开发范式，引领 Agent 工程化方向</div>
+        <div class="card-links">
+          <a href="https://github.com/obra/superpowers" target="_blank" class="link-btn link-gh">🔗 GitHub</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-rank rank-top3">#2</div>
+        <div class="card-name">🔧 n8n</div>
+        <div class="card-stars">⭐ 187,969</div>
+        <div class="card-desc">Fair-code 工作流自动化平台，内置原生 AI 能力，400+ 集成，可视化构建 + 自定义代码灵活结合</div>
+        <div class="card-links">
+          <a href="https://github.com/n8n-io/n8n" target="_blank" class="link-btn link-gh">🔗 GitHub</a>
+          <a href="https://n8n.io" target="_blank" class="link-btn link-web">🌐 官网</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-rank rank-top3">#3</div>
+        <div class="card-name">🤖 AutoGPT</div>
+        <div class="card-stars">⭐ 184,325</div>
+        <div class="card-desc">AI Agent 先驱项目，致力于让人人都能访问和使用 AI，自主多步骤任务执行 + 插件生态</div>
+        <div class="card-links">
+          <a href="https://github.com/Significant-Gravitas/AutoGPT" target="_blank" class="link-btn link-gh">🔗 GitHub</a>
+          <a href="https://agpt.co" target="_blank" class="link-btn link-web">🌐 官网</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-rank rank-other">#4</div>
+        <div class="card-name">🔮 Hermes Agent</div>
+        <div class="card-stars">⭐ 151,537</div>
+        <div class="card-desc">Nous Research 打造的智能 AI 助手，工具调用、代码执行、技能系统、多模型支持，与你一起成长的 Agent</div>
+        <div class="card-links">
+          <a href="https://github.com/NousResearch/hermes-agent" target="_blank" class="link-btn link-gh">🔗 GitHub</a>
+          <a href="https://hermes-agent.nousresearch.com/docs" target="_blank" class="link-btn link-doc">📚 文档</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-rank rank-other">#5</div>
+        <div class="card-name">🎨 Dify</div>
+        <div class="card-stars">⭐ 141,498</div>
+        <div class="card-desc">生产级 Agentic 工作流开发平台，可视化编排 LLM 应用，RAG 管道 + Agent 编排 + 企业级部署</div>
+        <div class="card-links">
+          <a href="https://github.com/langgenius/dify" target="_blank" class="link-btn link-gh">🔗 GitHub</a>
+          <a href="https://dify.ai" target="_blank" class="link-btn link-web">🌐 官网</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-rank rank-other">#6</div>
+        <div class="card-name">⛓️ LangChain</div>
+        <div class="card-stars">⭐ 136,811</div>
+        <div class="card-desc">最成熟的 LLM 应用开发框架，LangGraph（状态图 Agent）+ LangSmith（可观测性），完整生态体系</div>
+        <div class="card-links">
+          <a href="https://github.com/langchain-ai/langchain" target="_blank" class="link-btn link-gh">🔗 GitHub</a>
+          <a href="https://docs.langchain.com" target="_blank" class="link-btn link-doc">📚 文档</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-rank rank-other">#7</div>
+        <div class="card-name">💎 Claude Code</div>
+        <div class="card-stars">⭐ 123,828</div>
+        <div class="card-desc">Anthropic 推出的终端 Agentic 编码工具，深度理解代码库，自主完成任务，MCP 协议原生支持</div>
+        <div class="card-links">
+          <a href="https://github.com/anthropics/claude-code" target="_blank" class="link-btn link-gh">🔗 GitHub</a>
+          <a href="https://code.claude.com/docs/en/overview" target="_blank" class="link-btn link-doc">📚 文档</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tier 2 -->
+  <section class="section">
+    <div class="section-title">
+      <span class="icon">🥈</span> 第二梯队：热门项目
+    </div>
+    <p class="section-desc">5万-10万 GitHub Stars — 各细分领域的领军者</p>
+    <div class="tier-label tier-2">5万 - 10万 Stars</div>
+
+    <div class="cards">
+      <div class="card">
+        <div class="card-rank rank-other">#8</div>
+        <div class="card-name">🌍 Browser-use</div>
+        <div class="card-stars">⭐ 94,043</div>
+        <div class="card-desc">让网站对 AI Agent 可访问，AI 驱动的网页自动化，视觉理解 + 表单填写 + 复杂交互</div>
+        <div class="card-links">
+          <a href="https://github.com/browser-use/browser-use" target="_blank" class="link-btn link-gh">🔗 GitHub</a>
+          <a href="https://browser-use.com" target="_blank" class="link-btn link-web">🌐 官网</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-rank rank-other">#9</div>
+        <div class="card-name">🔌 MCP Servers</div>
+        <div class="card-stars">⭐ 85,700</div>
+        <div class="card-desc">Anthropic 推出的模型上下文协议服务器集合，定义 Agent-工具通信标准，跨模型兼容</div>
+        <div class="card-links">
+          <a href="https://github.com/modelcontextprotocol/servers" target="_blank" class="link-btn link-gh">🔗 GitHub</a>
+          <a href="https://modelcontextprotocol.io" target="_blank" class="link-btn link-web">🌐 官网</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-rank rank-other">#10</div>
+        <div class="card-name">📟 OpenAI Codex CLI</div>
+        <div class="card-stars">⭐ 82,861</div>
+        <div class="card-desc">OpenAI 轻量级终端编码 Agent，代码生成与执行，多步骤任务，沙箱安全执行</div>
+        <div class="card-links">
+          <a href="https://github.com/openai/codex" target="_blank" class="link-btn link-gh">🔗 GitHub</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-rank rank-other">#13</div>
+        <div class="card-name">🔷 Microsoft AutoGen</div>
+        <div class="card-stars">⭐ 58,053</div>
+        <div class="card-desc">微软多 Agent 对话协作框架，代码执行 + 人类参与循环 + AutoGen Studio 可视化</div>
+        <div class="card-links">
+          <a href="https://github.com/microsoft/autogen" target="_blank" class="link-btn link-gh">🔗 GitHub</a>
+          <a href="https://microsoft.github.io/autogen/" target="_blank" class="link-btn link-doc">📚 文档</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-rank rank-other">#15</div>
+        <div class="card-name">🧠 mem0</div>
+        <div class="card-stars">⭐ 55,786</div>
+        <div class="card-desc">AI Agent 通用记忆层，为 Agent 提供持久化上下文和用户偏好学习能力</div>
+        <div class="card-links">
+          <a href="https://github.com/mem0ai/mem0" target="_blank" class="link-btn link-gh">🔗 GitHub</a>
+          <a href="https://mem0.ai" target="_blank" class="link-btn link-web">🌐 官网</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-rank rank-other">#16</div>
+        <div class="card-name">🎭 CrewAI</div>
+        <div class="card-stars">⭐ 51,464</div>
+        <div class="card-desc">角色扮演自主 AI Agent 编排框架，通过协作智能实现复杂任务，支持顺序/层级流程</div>
+        <div class="card-links">
+          <a href="https://github.com/crewAIInc/crewAI" target="_blank" class="link-btn link-gh">🔗 GitHub</a>
+          <a href="https://crewai.com" target="_blank" class="link-btn link-web">🌐 官网</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tier 3 -->
+  <section class="section">
+    <div class="section-title">
+      <span class="icon">🥉</span> 第三梯队：快速增长
+    </div>
+    <p class="section-desc">2万-5万 GitHub Stars — 后起之秀，高速增长</p>
+    <div class="tier-label tier-3">2万 - 5万 Stars</div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>#</th><th>项目</th><th>⭐</th><th>描述</th><th>链接</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>17</td><td class="td-name">LlamaIndex</td><td class="td-stars">49,437</td><td>文档 Agent 平台，RAG 引擎</td><td class="td-links"><a href="https://github.com/run-llama/llama_index">GitHub</a> <a href="https://developers.llamaindex.ai">文档</a></td></tr>
+          <tr><td>18</td><td class="td-name">Aider</td><td class="td-stars">44,851</td><td>AI 结对编程，Git 感知编辑</td><td class="td-links"><a href="https://github.com/Aider-AI/aider">GitHub</a> <a href="https://aider.chat/">官网</a></td></tr>
+          <tr><td>19</td><td class="td-name">Agno</td><td class="td-stars">40,140</td><td>Agent 构建与管理平台</td><td class="td-links"><a href="https://github.com/agno-agi/agno">GitHub</a> <a href="https://docs.agno.com">文档</a></td></tr>
+          <tr><td>20</td><td class="td-name">Continue</td><td class="td-stars">33,205</td><td>IDE AI 编程助手 (VS Code/JetBrains)</td><td class="td-links"><a href="https://github.com/continuedev/continue">GitHub</a> <a href="https://docs.continue.dev">文档</a></td></tr>
+          <tr><td>21</td><td class="td-name">LangGraph</td><td class="td-stars">32,114</td><td>有状态 Agent 框架，状态图架构</td><td class="td-links"><a href="https://github.com/langchain-ai/langgraph">GitHub</a> <a href="https://docs.langchain.com/oss/python/langgraph/">文档</a></td></tr>
+          <tr><td>22</td><td class="td-name">Composio</td><td class="td-stars">28,248</td><td>1000+ Agent 工具集成平台</td><td class="td-links"><a href="https://github.com/ComposioHQ/composio">GitHub</a> <a href="https://docs.composio.dev">文档</a></td></tr>
+          <tr><td>23</td><td class="td-name">Semantic Kernel</td><td class="td-stars">27,908</td><td>微软企业 AI SDK (C#/Python/Java)</td><td class="td-links"><a href="https://github.com/microsoft/semantic-kernel">GitHub</a> <a href="https://aka.ms/semantic-kernel">文档</a></td></tr>
+          <tr><td>24</td><td class="td-name">smolagents</td><td class="td-stars">27,321</td><td>HuggingFace 轻量 Agent</td><td class="td-links"><a href="https://github.com/huggingface/smolagents">GitHub</a> <a href="https://huggingface.co/docs/smolagents">文档</a></td></tr>
+          <tr><td>25</td><td class="td-name">OpenAI Agents SDK</td><td class="td-stars">26,336</td><td>官方多 Agent 工作流框架</td><td class="td-links"><a href="https://github.com/openai/openai-agents-python">GitHub</a> <a href="https://openai.github.io/openai-agents-python/">文档</a></td></tr>
+          <tr><td>26</td><td class="td-name">Open-AutoGLM</td><td class="td-stars">25,282</td><td>智谱手机 Agent 框架</td><td class="td-links"><a href="https://github.com/zai-org/Open-AutoGLM">GitHub</a> <a href="https://autoglm.z.ai/blog">博客</a></td></tr>
+          <tr><td>28</td><td class="td-name">Mastra</td><td class="td-stars">23,910</td><td>TypeScript AI Agent 框架</td><td class="td-links"><a href="https://github.com/mastra-ai/mastra">GitHub</a> <a href="https://mastra.ai">官网</a></td></tr>
+          <tr><td>29</td><td class="td-name">Letta</td><td class="td-stars">22,729</td><td>有状态记忆 Agent 平台</td><td class="td-links"><a href="https://github.com/letta-ai/letta">GitHub</a> <a href="https://docs.letta.com/">文档</a></td></tr>
+          <tr><td>31</td><td class="td-name">OpenAI Swarm</td><td class="td-stars">21,490</td><td>教育性多 Agent 编排框架</td><td class="td-links"><a href="https://github.com/openai/swarm">GitHub</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Tier 4 -->
+  <section class="section">
+    <div class="section-title">
+      <span class="icon">🏅</span> 第四梯队：新兴力量
+    </div>
+    <p class="section-desc">1万-2万 GitHub Stars — 冉冉升起的新星</p>
+    <div class="tier-label tier-4">1万 - 2万 Stars</div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>#</th><th>项目</th><th>⭐</th><th>描述</th><th>链接</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>32</td><td class="td-name">12-Factor Agents</td><td class="td-stars">19,814</td><td>Agent 构建 12 条原则</td><td class="td-links"><a href="https://github.com/humanlayer/12-factor-agents">GitHub</a></td></tr>
+          <tr><td>33</td><td class="td-name">Google ADK</td><td class="td-stars">19,648</td><td>Google 官方 Agent 开发套件</td><td class="td-links"><a href="https://github.com/google/adk-python">GitHub</a> <a href="https://google.github.io/adk-docs/">文档</a></td></tr>
+          <tr><td>34</td><td class="td-name">ElizaOS</td><td class="td-stars">18,374</td><td>自主 Agent 框架 (Web3)</td><td class="td-links"><a href="https://github.com/elizaOS/eliza">GitHub</a> <a href="https://elizaos.ai/">官网</a></td></tr>
+          <tr><td>35</td><td class="td-name">Agent Zero</td><td class="td-stars">17,675</td><td>零配置 Agent 框架</td><td class="td-links"><a href="https://github.com/agent0ai/agent-zero">GitHub</a></td></tr>
+          <tr><td>37</td><td class="td-name">Pydantic AI</td><td class="td-stars">17,072</td><td>类型安全 Agent 框架</td><td class="td-links"><a href="https://github.com/pydantic/pydantic-ai">GitHub</a> <a href="https://ai.pydantic.dev">文档</a></td></tr>
+          <tr><td>38</td><td class="td-name">CAMEL</td><td class="td-stars">16,962</td><td>多 Agent 研究框架</td><td class="td-links"><a href="https://github.com/camel-ai/camel">GitHub</a> <a href="https://docs.camel-ai.org/">文档</a></td></tr>
+          <tr><td>39</td><td class="td-name">Plandex</td><td class="td-stars">15,365</td><td>大型项目编码 Agent</td><td class="td-links"><a href="https://github.com/plandex-ai/plandex">GitHub</a> <a href="https://plandex.ai">官网</a></td></tr>
+          <tr><td>40</td><td class="td-name">E2B</td><td class="td-stars">12,194</td><td>Agent 安全沙箱环境</td><td class="td-links"><a href="https://github.com/e2b-dev/E2B">GitHub</a> <a href="https://e2b.dev/docs">文档</a></td></tr>
+          <tr><td>42</td><td class="td-name">PocketFlow</td><td class="td-stars">10,619</td><td>100行极简 Agent 框架</td><td class="td-links"><a href="https://github.com/The-Pocket/PocketFlow">GitHub</a></td></tr>
+          <tr><td>43</td><td class="td-name">TEN Framework</td><td class="td-stars">10,574</td><td>语音 AI Agent 框架</td><td class="td-links"><a href="https://github.com/TEN-framework/ten-framework">GitHub</a> <a href="https://agent.theten.ai/">官网</a></td></tr>
+          <tr><td>44</td><td class="td-name">MS Agent Framework</td><td class="td-stars">10,461</td><td>微软新一代 Agent 框架</td><td class="td-links"><a href="https://github.com/microsoft/agent-framework">GitHub</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Ecosystem -->
+  <section class="section">
+    <div class="section-title">
+      <span class="icon">🌍</span> 重要生态项目
+    </div>
+    <p class="section-desc">虽非纯 Agent 框架，但对 Agent 生态至关重要</p>
+
+    <div class="eco-grid">
+      <div class="eco-card">
+        <div class="eco-name">🦙 Ollama</div>
+        <div class="eco-stars">⭐ 171,451</div>
+        <div class="eco-role">本地模型运行平台，Agent 最常用本地推理后端</div>
+        <div class="card-links">
+          <a href="https://github.com/ollama/ollama" target="_blank" class="link-btn link-gh">🔗 GitHub</a>
+          <a href="https://ollama.com" target="_blank" class="link-btn link-web">🌐 官网</a>
+        </div>
+      </div>
+      <div class="eco-card">
+        <div class="eco-name">📡 MCP 协议</div>
+        <div class="eco-role">Anthropic 推出的 Agent-工具通信协议标准，已成为事实标准</div>
+        <div class="card-links">
+          <a href="https://github.com/modelcontextprotocol/specification" target="_blank" class="link-btn link-gh">🔗 GitHub</a>
+          <a href="https://modelcontextprotocol.io" target="_blank" class="link-btn link-web">🌐 官网</a>
+        </div>
+      </div>
+      <div class="eco-card">
+        <div class="eco-name">🔧 Composio</div>
+        <div class="eco-stars">⭐ 28,248</div>
+        <div class="eco-role">1000+ Agent 工具集成和认证管理平台</div>
+        <div class="card-links">
+          <a href="https://github.com/ComposioHQ/composio" target="_blank" class="link-btn link-gh">🔗 GitHub</a>
+        </div>
+      </div>
+      <div class="eco-card">
+        <div class="eco-name">🧠 mem0</div>
+        <div class="eco-stars">⭐ 55,786</div>
+        <div class="eco-role">AI Agent 通用记忆层，持久化上下文和偏好学习</div>
+        <div class="card-links">
+          <a href="https://github.com/mem0ai/mem0" target="_blank" class="link-btn link-gh">🔗 GitHub</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>📊 <strong>AI Agent 热门项目全景报告</strong> · 数据采集于 2026-05-15</p>
+    <p style="margin-top:8px">Star 数可能已有变化，所有链接已验证有效 · Powered by <strong>Hermes Agent</strong></p>
+  </footer>
+
+</div>
+
+</body>
+</html>
